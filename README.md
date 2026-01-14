@@ -1,15 +1,18 @@
 # News Summarizer
 
 ## Overview
-The **News Summarizer** is a Django-based web application designed to extract and summarize news articles from various online sources. It leverages natural language processing (NLP) techniques to generate concise summaries, enabling users to quickly understand the key points of news articles. The application provides a user-friendly web interface for inputting article URLs and viewing summaries.
+<img width="1881" height="907" alt="image" src="https://github.com/user-attachments/assets/2e06d47c-aecf-4a58-85ec-6ba9b00ca484" />
+
+The **News Summarizer** is a Django web app that aggregates latest news from multiple sources via NewsAPI, uses AI transformers to summarize full articles, and displays clean, readable news with citations in a dark-themed, user-friendly interface.
 
 ## Features
-- **Article Extraction**: Fetches news articles from provided URLs or external APIs.
-- **Text Summarization**: Uses NLP algorithms to produce concise and accurate summaries.
-- **Customizable Summaries**: Allows users to specify summary length or other parameters.
-- **Web Interface**: Built with Django templates for an intuitive user experience.
-- **API Integration**: Supports integration with news APIs for fetching articles (configured in `utils.py`).
-- **Scalable Design**: Modular structure with Django's app-based architecture.
+- Aggregates latest news from multiple sources using NewsAPI
+- Supports news search with language filtering
+- Extracts and parses full article content using Newspaper3k
+- Summarizes news articles using AI transformer models (distilbart-cnn-12-6)
+- Displays news headlines with author, source, and publish date citations
+- Opens full articles in a clean, dark-themed popup reader mode with scrollable content
+- Easy customization of language, summarization model, and news filters in code
 
 ## Project Structure
 ```
@@ -47,23 +50,17 @@ news-summarizer/
    cd news-summarizer
    ```
 
-2. **Set Up a Virtual Environment** (recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install Dependencies**:
+2. **Install Dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Apply Migrations**:
+3. **Apply Migrations**:
    ```bash
    python manage.py migrate
    ```
 
-5. **Run the Development Server**:
+4. **Run the Development Server**:
    ```bash
    python manage.py runserver
    ```
