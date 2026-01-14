@@ -2,8 +2,6 @@
 
 A modern, AI-powered news aggregation and summarization platform that fetches news from multiple trusted sources and provides summaries with citations.
 
-![News Summarizer Screenshot](screenshot.png)
-
 ## Features
 
 - **Multi-Source News Aggregation** - Fetches news from trusted sources including BBC, CNN, Reuters, TechCrunch, The Verge, Wired, and more
@@ -12,6 +10,20 @@ A modern, AI-powered news aggregation and summarization platform that fetches ne
 - **Modern Dark UI** - Beautiful glassmorphism design with responsive grid layout
 - **Article Reader** - Click any article to view full content in a modal popup
 - **Dual API Integration** - Uses both NewsAPI and GNews API for comprehensive coverage
+
+## Screenshots
+
+### Top Headlines
+<img width="1842" height="963" alt="NewsAnalyzer(Homepage)" src="https://github.com/user-attachments/assets/9b4bba87-6f1d-4438-ad2f-77020a39ab45" />
+Browse the latest news from trusted sources in a beautiful card grid layout.
+
+### Topic Summary with Citations
+<img width="1842" height="965" alt="NewsAnalyzer(Summarizer)" src="https://github.com/user-attachments/assets/c50c924c-7493-49ca-b88c-99017957cc48" />
+Get AI-generated summaries of any topic with inline citations and source links.
+
+### Search Results
+<img width="1828" height="952" alt="NewsAnalyzer(Search)" src="https://github.com/user-attachments/assets/ae3c016a-3937-4f76-83b0-5e9960c37f7d" />
+Search for any topic and get relevant articles from multiple news sources.
 
 ## Tech Stack
 
