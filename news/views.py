@@ -1,19 +1,28 @@
 from django.shortcuts import render
-from .utils import get_latest_news, search_news, get_summarized_news
+from .utils import get_latest_news, search_news, get_summarized_news, fetch_article, get_multi_source_summary
 from django.http import JsonResponse
-from newspaper import Article
 
 def fetch_full_article(request):
     url = request.GET.get('url')
     if not url:
         return JsonResponse({'error': 'No URL provided'}, status=400)
     try:
-        article = Article(url)
-        article.download()
-        article.parse()
-        return JsonResponse({'content': article.text})
+        content = fetch_article(url)
+        if content:
+            return JsonResponse({'content': content})
+        else:
+            return JsonResponse({'error': 'Could not extract article content'}, status=500)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+def summarize_topic(request):
+    """Generate a multi-source summary with citations for a topic."""
+    query = request.GET.get('query')
+    if not query:
+        return JsonResponse({'error': 'No query provided'}, status=400)
+    
+    result = get_multi_source_summary(query)
+    return JsonResponse(result)
 
 def home(request):
     url = request.GET.get('url')

@@ -1,318 +1,756 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --primary-accent: #3b82f6;
+            --secondary-accent: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+            --glass-blur: blur(12px);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #181a20;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
+            line-height: 1.6;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
         }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
         h1 {
-            color: #fff;
-            background: #23272f;
-            padding: 1.4rem;
-            margin-bottom: 1rem;
-            letter-spacing: 2px;
-            font-weight: bold;
-            font-size: 2rem;
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
         }
+
         h1 a {
-            color: inherit;
+            color: var(--text-main);
             text-decoration: none;
-            font-size: inherit;
-            font-weight: inherit;
-            cursor: pointer;
+            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+
+        /* Search Form */
+        .search-container {
+            flex-grow: 1;
+            max-width: 600px;
+            margin: 0 2rem;
+        }
+
         form {
-            text-align: center;
-            margin-bottom: 2rem;
+            display: flex;
+            gap: 0.5rem;
         }
+
         input[type="text"] {
-            width: 50%;
-            padding: 0.7rem;
-            margin-right: 0.5rem;
-            border-radius: 5px;
-            border: none;
-            background: #21232a;
-            color: #e0e0e0;
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid var(--card-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.2s;
+            font-family: inherit;
         }
-        input[type="submit"] {
-            padding: 0.7rem 1.4rem;
-            border-radius: 5px;
+
+        input[type="text"]:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-accent);
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 9999px;
             border: none;
-            background: #3e4f71;
-            color: #fff;
+            font-weight: 500;
             cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--primary-accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: var(--secondary-accent);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7c3aed;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Layout */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .news-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+
+        .news-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .news-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin: 0 0 0.8rem 0;
+            line-height: 1.4;
+        }
+
+        .news-link {
+            color: var(--text-main);
+            text-decoration: none;
+            display: block;
+        }
+
+        .news-meta {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--card-border);
+            padding-top: 1rem;
+        }
+
+        .source-tag {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .news-desc {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Summary Container */
+        .summary-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .summary-text {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            margin-bottom: 2rem;
+            color: #e2e8f0;
+        }
+
+        /* Citation styling */
+        .citation {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-accent);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            margin: 0 2px;
+            cursor: pointer;
+            text-decoration: none;
+            vertical-align: super;
             transition: background 0.2s;
         }
-        input[type="submit"]:hover {
-            background: #53627a;
+
+        .citation:hover {
+            background: #2563eb;
         }
-        .news-block {
-            max-width: 650px;
-            margin: 2rem auto 1rem auto;
-            background: #23272f;
-            border-radius: 10px;
-            padding: 1.5rem 2rem;
-            box-shadow: 1px 2px 4px rgba(0,0,0,0.14);
+
+        /* Sources Section */
+        .sources-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--card-border);
         }
-        ul {
-            list-style: none;
-            padding: 0;
+
+        .sources-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        li {
-            margin-bottom: 2.2rem;
-            border-bottom: 1px solid #363636;
-            padding-bottom: 1.2rem;
+
+        .sources-title::before {
+            content: '📚';
         }
-        li:last-child {
+
+        .source-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .source-item:last-child {
             border-bottom: none;
         }
-        a.news-link {
-            color: #64b5f6;
-            text-decoration: none;
+
+        .source-num {
+            background: var(--primary-accent);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .source-info {
+            flex: 1;
+        }
+
+        .source-article-title {
             font-weight: 500;
-            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
         }
-        a.news-link:hover {
-            text-decoration: underline;
-            color: #90caf9;
-        }
-        .source {
-            font-style: italic;
-            color: #bdbdbd;
-        }
-        .date {
+
+        .source-meta {
             font-size: 0.85rem;
-            color: #888;
+            color: var(--text-secondary);
         }
-        .description {
-            font-size: 1rem;
-            margin-top: 0.7rem;
-            color: #f1f1f1;
+
+        .source-link {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.85rem;
+            word-break: break-all;
         }
-        .summary-block {
-            max-width: 650px;
-            margin: 2rem auto 1rem auto;
-            background: #283041;
-            border-radius: 10px;
-            padding: 1.5rem 2rem;
+
+        .source-link:hover {
+            text-decoration: underline;
         }
-        @media (max-width: 700px){
-            .news-block, .summary-block {
-                max-width: 96vw;
-                padding: 1rem 1vw;
-            }
-            input[type="text"] {
-                width: 70vw;
+
+        .read-full-btn {
+            display: inline-block;
+            background: var(--primary-accent);
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .read-full-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Loading state */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--card-border);
+            border-top-color: var(--primary-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
             }
         }
 
-        /* Modal overlay */
+        /* Topic Summary Container */
+        #topicSummaryContainer {
+            display: none;
+        }
+
+        /* Modal */
         #articleModal {
             display: none;
             position: fixed;
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0,0,0,0.8);
-            color: #fff;
-            display: flex;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            padding: 1rem;
+            padding: 1.5rem;
         }
 
-        /* Popup window */
         #modalWindow {
-            background: #1e1e28;
-            border-radius: 10px;
-            width: 80vw;
-            max-width: 700px;
-            max-height: 80vh;
+            background: #1e293b;
+            width: 100%;
+            max-width: 800px;
+            max-height: 85vh;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 15px rgba(255,255,255,0.1);
-            position: relative;
+            animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Scrollable content area */
-        #modalContent {
-            padding: 1.5rem;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #888 #222;
-            flex-grow: 1;
-            font-size: 1.1rem;
-            line-height: 1.6;
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        /* Webkit scrollbar styling for scrollbar inside popup content */
-        #modalContent::-webkit-scrollbar {
-            width: 12px;
-        }
-        #modalContent::-webkit-scrollbar-track {
-            background: #222;
-        }
-        #modalContent::-webkit-scrollbar-thumb {
-            background-color: #888;
-            border-radius: 6px;
-            border: 3px solid #222;
+        #modalHeader {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
         }
 
-        /* Close button positioned outside popup */
-        #closeModal {
-            position: fixed;
-            top: 2.5rem;
-            right: 3vw;
-            background: #444;
-            color: #fff;
-            border: none;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            font-size: 1.4rem;
-            z-index: 1101;
-            border-radius: 5px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.4);
-            transition: background 0.2s;
-        }
-        #closeModal:hover {
-            background: #666;
-        }
-
-        /* Headline and citations container */
         #modalHeadline {
-            padding: 1.5rem 1.5rem 0 1.5rem;
-            font-weight: bold;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0;
+            line-height: 1.3;
         }
-        #modalCitations {
-            padding: 0 1.5rem 0.5rem 1.5rem;
-            font-size: 1rem;
-            color: #bdbdbd;
+
+        #closeModal {
+            background: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            border: none;
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 1rem;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #closeModal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        #modalMeta {
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.3);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #modalMeta strong {
+            color: #cbd5e1;
+        }
+
+        #modalContent {
+            padding: 2rem;
+            overflow-y: auto;
+            color: #e2e8f0;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        #modalContent p {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .search-container {
+                margin: 0;
+                max-width: none;
+            }
+
+            form {
+                flex-wrap: wrap;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
-    <h1><a href="/">News Analyzer</a></h1>
-    <form method="get">
-        <input type="text" name="query" placeholder="Search news" value="{{ query|default:'' }}" />
-        <input type="submit" value="Search" />
-    </form>
+    <header>
+        <h1><a href="/">News Analyzer</a></h1>
+        <div class="search-container">
+            <form method="get" id="searchForm">
+                <input type="text" name="query" id="queryInput" placeholder="Search global news..."
+                    value="{{ query|default:'' }}" />
+                <button type="submit" class="btn btn-primary">Search</button>
+                <button type="button" class="btn btn-secondary" id="summarizeBtn">Summarize Topic</button>
+            </form>
+        </div>
+    </header>
 
-    {% if summary %}
-    <div class="summary-block">
-        <h2>Summary of Article</h2>
-        <p>{{ summary }}</p>
-        <p>
-            <a href="{{ request.GET.url }}" target="_blank" style="color:#64b5f6;">Read full article</a>
-        </p>
-    </div>
-    {% else %}
-    <div class="news-block">
-        <h2>Latest News{% if query %} – Results for "{{ query }}"{% endif %}</h2>
-        <ul>
-        {% for article in articles %}
-            <li>
-                <a href="{{ article.url }}" 
-                   class="news-link"
-                   data-headline="{{ article.title|escape }}"
-                   data-author="{{ article.author|default:'Unknown'|escape }}"
-                   data-source="{{ article.source.name|escape }}"
-                   data-pubdate="{{ article.publishedAt|default:'' }}">
-                    {{ article.title }}
-                </a>
-                {% if article.source.name %}
-                    <span class="source"> - {{ article.source.name }}</span>
-                {% endif %}
-                <br>
-                {% if article.publishedAt %}
-                    <span class="date">{{ article.publishedAt|date:"M d, Y H:i" }}</span>
-                {% endif %}
-                {% if article.description and article.description != "None" %}
-                    <div class="description">{{ article.description }}</div>
-                {% endif %}
-            </li>
-        {% empty %}
-            <li>No news articles found.</li>
-        {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
+    <main>
+        <!-- Topic Summary Container (shown when user clicks Summarize Topic) -->
+        <div id="topicSummaryContainer" class="summary-container">
+            <h2 class="section-title" id="topicSummaryTitle">Topic Summary</h2>
+            <div id="topicSummaryContent">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Analyzing articles from multiple sources...</p>
+                </div>
+            </div>
+        </div>
 
-    <!-- Modal popup -->
-    <div id="articleModal" role="dialog" aria-modal="true" aria-labelledby="modalHeadline" aria-describedby="modalContent">
-      <button id="closeModal">× Close</button>
-      <div id="modalWindow">
-        <div id="modalHeadline"></div>
-        <div id="modalCitations"></div>
-        <div id="modalContent">Loading article...</div>
-      </div>
+        {% if summary %}
+        <div class="summary-container">
+            <h2 class="section-title">Article Summary</h2>
+            <div class="summary-text">{{ summary }}</div>
+            <a href="{{ request.GET.url }}" target="_blank" class="read-full-btn">Read original article</a>
+        </div>
+        {% else %}
+        <div id="newsContent">
+            <h2 class="section-title">
+                {% if query %}Results for "{{ query }}"{% else %}Top Headlines{% endif %}
+            </h2>
+
+            <div class="news-grid">
+                {% for article in articles %}
+                <div class="news-card">
+                    <h3 class="news-title">
+                        <a href="{{ article.url }}" class="news-link" data-headline="{{ article.title|escape }}"
+                            data-author="{{ article.author|default:'Unknown'|escape }}"
+                            data-source="{{ article.source.name|escape }}"
+                            data-pubdate="{{ article.publishedAt|default:'' }}">
+                            {{ article.title }}
+                        </a>
+                    </h3>
+
+                    {% if article.description and article.description != "None" %}
+                    <div class="news-desc">{{ article.description }}</div>
+                    {% endif %}
+
+                    <div class="news-meta">
+                        {% if article.source.name %}
+                        <span class="source-tag">{{ article.source.name }}</span>
+                        {% else %}
+                        <span></span>
+                        {% endif %}
+
+                        {% if article.publishedAt %}
+                        <span>{{ article.publishedAt|date:"M d, Y" }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p>No news articles found.</p>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    <!-- Modal -->
+    <div id="articleModal">
+        <div id="modalWindow">
+            <div id="modalHeader">
+                <h3 id="modalHeadline"></h3>
+                <button id="closeModal">&times;</button>
+            </div>
+            <div id="modalMeta">
+                <div id="modalMetaAuthor"></div>
+                <div id="modalMetaSource"></div>
+                <div id="modalMetaDate"></div>
+            </div>
+            <div id="modalContent">Loading article...</div>
+        </div>
     </div>
 
     <script>
-      document.getElementById('articleModal').style.display = 'none';
-      document.addEventListener('DOMContentLoaded', () => {
-        const modal = document.getElementById('articleModal');
-        const modalContent = document.getElementById('modalContent');
-        const closeModalBtn = document.getElementById('closeModal');
-        const modalHeadline = document.getElementById('modalHeadline');
-        const modalCitations = document.getElementById('modalCitations');
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('articleModal');
+            const modalContent = document.getElementById('modalContent');
+            const closeModalBtn = document.getElementById('closeModal');
+            const modalHeadline = document.getElementById('modalHeadline');
+            const modalMetaAuthor = document.getElementById('modalMetaAuthor');
+            const modalMetaSource = document.getElementById('modalMetaSource');
+            const modalMetaDate = document.getElementById('modalMetaDate');
 
-        closeModalBtn.onclick = () => {
-          modal.style.display = 'none';
-          modalHeadline.innerHTML = '';
-          modalCitations.innerHTML = '';
-          modalContent.innerHTML = 'Loading article...';
-        };
+            // Topic summary elements
+            const summarizeBtn = document.getElementById('summarizeBtn');
+            const queryInput = document.getElementById('queryInput');
+            const topicSummaryContainer = document.getElementById('topicSummaryContainer');
+            const topicSummaryContent = document.getElementById('topicSummaryContent');
+            const topicSummaryTitle = document.getElementById('topicSummaryTitle');
+            const newsContent = document.getElementById('newsContent');
 
-        document.querySelectorAll('.news-block .news-link').forEach(link => {
-          link.addEventListener('click', e => {
-            e.preventDefault();
-            const url = link.getAttribute('href');
-            const headline = link.getAttribute('data-headline');
-            const author = link.getAttribute('data-author');
-            const source = link.getAttribute('data-source');
-            const pubdateRaw = link.getAttribute('data-pubdate');
-            let pubdate = "";
-            if(pubdateRaw){
-              const d = new Date(pubdateRaw);
-              pubdate = d.toLocaleString('en-us', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            function closeModal() {
+                modal.style.display = 'none';
+                modalContent.innerHTML = 'Loading article...';
+                document.body.style.overflow = '';
             }
 
-            modalHeadline.textContent = headline;
-            modalCitations.innerHTML = `
-              <span><strong>Author:</strong> ${author}</span> |
-              <span><strong>Source:</strong> ${source}</span> |
-              <span><strong>Published At:</strong> ${pubdate}</span>
+            closeModalBtn.onclick = closeModal;
+            modal.onclick = (e) => {
+                if (e.target === modal) closeModal();
+            };
+
+            // Article modal functionality
+            document.querySelectorAll('.news-link').forEach(link => {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    const url = link.getAttribute('href');
+                    const headline = link.getAttribute('data-headline');
+                    const author = link.getAttribute('data-author');
+                    const source = link.getAttribute('data-source');
+                    const pubdateRaw = link.getAttribute('data-pubdate');
+
+                    let pubdate = "";
+                    if (pubdateRaw) {
+                        const d = new Date(pubdateRaw);
+                        pubdate = d.toLocaleString('en-us', { year: 'numeric', month: 'short', day: 'numeric' });
+                    }
+
+                    modalHeadline.textContent = headline;
+                    modalMetaAuthor.innerHTML = `<strong>By:</strong> ${author}`;
+                    modalMetaSource.innerHTML = `<strong>Source:</strong> ${source}`;
+                    modalMetaDate.innerHTML = `<strong>Date:</strong> ${pubdate}`;
+
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+
+                    fetch(`/fetch_article/?url=${encodeURIComponent(url)}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error) {
+                                modalContent.innerHTML = `<p style="color: #ef4444;">Error loading article: ${data.error}</p>`;
+                            } else {
+                                let cleanedText = data.content
+                                    .split('\n')
+                                    .filter(line => line.trim() !== "" && !/Advertisement/i.test(line))
+                                    .join('\n');
+                                const formatted = cleanedText.replace(/\n+/g, '</p><p>');
+                                modalContent.innerHTML = `<p>${formatted}</p>`;
+                            }
+                        })
+                        .catch(err => {
+                            modalContent.innerHTML = `<p style="color: #ef4444;">Failed to fetch article: ${err}</p>`;
+                        });
+                });
+            });
+
+            // Summarize Topic functionality
+            summarizeBtn.addEventListener('click', () => {
+                const query = queryInput.value.trim();
+                if (!query) {
+                    alert('Please enter a topic to summarize');
+                    return;
+                }
+
+                // Show loading state
+                if (newsContent) newsContent.style.display = 'none';
+                topicSummaryContainer.style.display = 'block';
+                topicSummaryTitle.textContent = `Summary: "${query}"`;
+                topicSummaryContent.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Analyzing articles from multiple sources...</p>
+                </div>
             `;
 
-            modal.style.display = 'flex';
+                summarizeBtn.disabled = true;
+                summarizeBtn.textContent = 'Summarizing...';
 
-            fetch(`/fetch_article/?url=${encodeURIComponent(url)}`)
-              .then(res => res.json())
-              .then(data => {
-                if(data.error) {
-                  modalContent.innerHTML = `<p style="color: #ff6b6b;">Error loading article: ${data.error}</p>`;
-                } else {
-                  let cleanedText = data.content
-                    .split('\n')
-                    .filter(line => line.trim() !== "" && !/Advertisement/i.test(line))
-                    .join('\n');
-                  const formatted = cleanedText.replace(/\n+/g, '</p><p>');
-                  modalContent.innerHTML = `<p>${formatted}</p>`;
-                }
-              })
-              .catch(err => {
-                modalContent.innerHTML = `<p style="color: #ff6b6b;">Failed to fetch article: ${err}</p>`;
-              });
-          });
+                fetch(`/summarize_topic/?query=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        summarizeBtn.disabled = false;
+                        summarizeBtn.textContent = 'Summarize Topic';
+
+                        if (data.error) {
+                            topicSummaryContent.innerHTML = `<p style="color: #ef4444;">${data.error}</p>`;
+                            return;
+                        }
+
+                        // Format summary with clickable citations
+                        let formattedSummary = data.summary.replace(/\[(\d+)\]/g, (match, num) => {
+                            const source = data.sources.find(s => s.num == num);
+                            if (source) {
+                                return `<a href="#source-${num}" class="citation" title="${source.title}">${num}</a>`;
+                            }
+                            return match;
+                        });
+
+                        // Build sources section
+                        let sourcesHtml = '';
+                        if (data.sources && data.sources.length > 0) {
+                            sourcesHtml = `
+                            <div class="sources-section">
+                                <h3 class="sources-title">Sources</h3>
+                                ${data.sources.map(s => `
+                                    <div class="source-item" id="source-${s.num}">
+                                        <span class="source-num">${s.num}</span>
+                                        <div class="source-info">
+                                            <div class="source-article-title">${s.title}</div>
+                                            <div class="source-meta">${s.source}</div>
+                                            <a href="${s.url}" target="_blank" class="source-link">${s.url}</a>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                        }
+
+                        topicSummaryContent.innerHTML = `
+                        <div class="summary-text">${formattedSummary}</div>
+                        ${sourcesHtml}
+                        <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 1.5rem;">← Back to Headlines</button>
+                    `;
+                    })
+                    .catch(err => {
+                        summarizeBtn.disabled = false;
+                        summarizeBtn.textContent = 'Summarize Topic';
+                        topicSummaryContent.innerHTML = `<p style="color: #ef4444;">Failed to summarize topic: ${err}</p>`;
+                    });
+            });
         });
-      });
     </script>
 </body>
+
 </html>
