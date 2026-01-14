@@ -1,109 +1,97 @@
 # News Summarizer
 
-## Overview
-<img width="1881" height="907" alt="image" src="https://github.com/user-attachments/assets/2e06d47c-aecf-4a58-85ec-6ba9b00ca484" />
+A modern, AI-powered news aggregation and summarization platform that fetches news from multiple trusted sources and provides summaries with citations.
 
-The **News Summarizer** is a Django web app that aggregates latest news from multiple sources via NewsAPI, uses AI transformers to summarize full articles, and displays clean, readable news with citations in a dark-themed, user-friendly interface.
+![News Summarizer Screenshot](screenshot.png)
 
 ## Features
-- Aggregates latest news from multiple sources using NewsAPI
-- Supports news search with language filtering
-- Extracts and parses full article content using Newspaper3k
-- Summarizes news articles using AI transformer models (distilbart-cnn-12-6)
-- Displays news headlines with author, source, and publish date citations
-- Opens full articles in a clean, dark-themed popup reader mode with scrollable content
-- Easy customization of language, summarization model, and news filters in code
+
+- **Multi-Source News Aggregation** - Fetches news from trusted sources including BBC, CNN, Reuters, TechCrunch, The Verge, Wired, and more
+- **AI-Powered Summarization** - Uses DistilBART model to generate concise summaries of articles
+- **Citations** - Summarize any topic with inline citations [1], [2] linking to source articles
+- **Modern Dark UI** - Beautiful glassmorphism design with responsive grid layout
+- **Article Reader** - Click any article to view full content in a modal popup
+- **Dual API Integration** - Uses both NewsAPI and GNews API for comprehensive coverage
+
+## Tech Stack
+
+- **Backend**: Django 4.0+
+- **AI/ML**: Hugging Face Transformers (DistilBART)
+- **Article Extraction**: Newspaper3k
+- **APIs**: NewsAPI, GNews API
+- **Frontend**: HTML5, CSS3 (Glassmorphism), Vanilla JavaScript
 
 ## Project Structure
+
 ```
 news-summarizer/
-│
-├── manage.py                  
-├── newsanalyzer/            
-│   ├── __init__.py
-│   ├── asgi.py
-│   ├── settings.py          
-│   ├── urls.py               
-│   ├── wsgi.py
-├── news/                     
-│   ├── migrations/          
-│   │   └── __init__.py
-│   ├── __init__.py
-│   ├── admin.py              
-│   ├── apps.py              
-│   ├── models.py            
-│   ├── tests.py             
-│   ├── urls.py               
-│   ├── utils.py              
-│   ├── views.py              
-│   └── templates/
-│       └── news/
-│           └── home.html    
-├── requirements.txt          
-└── README.md                
+├── manage.py
+├── requirements.txt
+├── db.sqlite3
+├── newsanalyzer/           # Django project settings
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── news/                   # Main application
+    ├── views.py            # API endpoints & page rendering
+    ├── utils.py            # News fetching & AI summarization
+    ├── urls.py             # URL routing
+    └── templates/
+        └── news/
+            └── home.html   # Frontend UI
 ```
 
 ## Installation
+
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/VaradHajare/news-summarizer.git
    cd news-summarizer
    ```
 
-2. **Install Dependencies**:
+2. **Set Up Virtual Environment**:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install Dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Apply Migrations**:
-   ```bash
-   python manage.py migrate
-   ```
-
-4. **Run the Development Server**:
+4. **Run the Server**:
    ```bash
    python manage.py runserver
    ```
-   Access the application at `http://localhost:8000`.
+
+5. **Open in Browser**: Navigate to `http://localhost:8000`
+
+## API Keys
+
+The application uses two news APIs:
+
+- **NewsAPI** - Already configured (free tier: 100 requests/day for development)
+- **GNews API** - Get your free key at [gnews.io](https://gnews.io) and update `GNEWS_API_KEY` in `news/utils.py`
 
 ## Usage
-1. **Access the Web Interface**:
-   - Open a browser and navigate to `http://localhost:8000`.
-   - Enter the URL of a news article in the provided input field on the `home.html` page.
-   - Adjust summary length or other parameters (if available).
-   - Submit to view the generated summary.
 
-2. **API Integration** (Optional):
-   - Configure API keys in `newsanalyzer/settings.py` or `news/utils.py` for external news APIs (e.g., NewsAPI).
-   - Update `utils.py` to fetch articles programmatically if needed.
+### Browse Headlines
+The homepage displays top headlines from trusted news sources in a responsive card grid.
 
-3. **Admin Panel**:
-   - Create a superuser to access the Django admin panel:
-     ```bash
-     python manage.py createsuperuser
-     ```
-   - Access the admin panel at `http://localhost:8000/admin` to manage models or data.
+### Search News
+Enter a topic in the search bar and click "Search" to find related articles.
 
-## Requirements
-- Python 3.8+
-- Django 4.0+
-- Other dependencies listed in `requirements.txt` (e.g., `requests`, `nltk`, `beautifulsoup4`, etc.)
+### Summarize Topic
+Enter a topic and click "Summarize Topic" to get an AI-generated summary combining information from multiple sources, complete with inline citations and a references section.
 
-## Configuration
-- **Settings**: Modify `newsanalyzer/settings.py` to configure database, API keys, or other settings.
-- **Summarization Logic**: Customize summarization algorithms in `news/utils.py`.
-- **Frontend**: Update `news/templates/news/home.html` for UI changes.
-
-## Contributing
-Contributions are welcome! To contribute:
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes and commit (`git commit -m "Add feature"`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Open a Pull Request.
+### Read Articles
+Click any article card to view the full article content in a popup modal.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Contact
-For questions or suggestions, reach out to [Varad Hajare](https://github.com/VaradHajare) or open an issue on this repository.
+MIT License - See [LICENSE](LICENSE) for details.
+
+## Author
+
+[Varad Hajare](https://github.com/VaradHajare)
